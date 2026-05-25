@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ironside Contracting · Built Right. The First Time.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #0e0f11;
+    color: #e8e8e6;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  :root {
+    --bg: #0e0f11;
+    --bg-2: #16181c;
+    --bg-3: #1d2027;
+    --line: rgba(255, 255, 255, 0.08);
+    --line-2: rgba(255, 255, 255, 0.14);
+    --ink: #e8e8e6;
+    --ink-soft: rgba(232, 232, 230, 0.7);
+    --ink-mute: rgba(232, 232, 230, 0.45);
+    --orange: #ff6b1a;
+    --orange-dark: #e55a0d;
+  }
+  img { display: block; max-width: 100%; }
+  a { color: inherit; text-decoration: none; }
+
+  /* SAMPLE banner */
+  .sample-banner {
+    background: #1a2b50;
+    color: #fff;
+    text-align: center;
+    padding: 10px 16px;
+    font-size: 12px;
+    letter-spacing: 0.4px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+  }
+  .sample-banner a {
+    color: #fff;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* NAV */
+  nav.top {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(14, 15, 17, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner {
+    max-width: 1340px;
+    margin: 0 auto;
+    padding: 18px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 32px;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 18px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .logo .lmark {
+    width: 26px; height: 26px;
+    background: var(--orange);
+    display: flex; align-items: center; justify-content: center;
+    color: #000;
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 14px;
+    transform: skewX(-8deg);
+  }
+  .logo .lmark span { transform: skewX(8deg); }
+  .nav-links {
+    display: flex; gap: 32px;
+    list-style: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .nav-links a { color: var(--ink-soft); transition: color 0.2s; }
+  .nav-links a:hover { color: var(--orange); }
+  .phone-pill {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--orange);
+    color: #000;
+    padding: 11px 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    transition: background 0.2s;
+  }
+  .phone-pill:hover { background: #fff; }
+  .phone-pill .pic { font-size: 14px; }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    min-height: 90vh;
+    display: flex;
+    align-items: flex-end;
+    padding: 80px 32px 80px;
+    overflow: hidden;
+    background:
+      linear-gradient(180deg, rgba(14,15,17,0.4) 0%, rgba(14,15,17,0.85) 60%, rgba(14,15,17,1) 100%),
+      url('https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=2200&q=80') center/cover;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+  .hero-inner {
+    max-width: 1340px;
+    margin: 0 auto;
+    width: 100%;
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 60px;
+    align-items: flex-end;
+  }
+  .hero-text .stamp {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 14px;
+    border: 1px solid var(--orange);
+    background: rgba(255, 107, 26, 0.1);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 28px;
+  }
+  .hero-text .stamp .dot {
+    width: 6px; height: 6px;
+    background: var(--orange);
+    border-radius: 50%;
+  }
+  .hero-text h1 {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: clamp(54px, 8vw, 130px);
+    line-height: 0.92;
+    letter-spacing: -1.5px;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin-bottom: 24px;
+  }
+  .hero-text h1 .or { color: var(--orange); }
+  .hero-text h1 .outline {
+    -webkit-text-stroke: 2px var(--ink);
+    color: transparent;
+  }
+  .hero-text p {
+    font-size: 18px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    max-width: 520px;
+    margin-bottom: 36px;
+  }
+  .hero-ctas {
+    display: flex; gap: 14px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    padding: 16px 28px;
+    background: var(--orange);
+    color: #000;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .btn:hover { background: #fff; transform: translateY(-1px); }
+  .btn.outline {
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--line-2);
+  }
+  .btn.outline:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+  /* Hero stats card */
+  .hero-stats {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    padding: 30px;
+  }
+  .hero-stats .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--line);
+  }
+  .hero-stats .stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .hero-stats .stat-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .hero-stats .stat-row .k {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 32px;
+    color: var(--ink);
+    letter-spacing: -0.5px;
+  }
+  .hero-stats .stat-row .k .u {
+    color: var(--orange);
+    font-size: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    margin-left: 4px;
+    font-weight: 700;
+  }
+  .hero-stats .stat-row .lbl {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* SERVICES */
+  section.services {
+    padding: 110px 32px;
+    max-width: 1340px;
+    margin: 0 auto;
+  }
+  .section-head {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: end;
+    margin-bottom: 60px;
+  }
+  .section-head .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 18px;
+  }
+  .section-head h2 {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: clamp(46px, 6vw, 84px);
+    line-height: 0.95;
+    letter-spacing: -1px;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .section-head h2 .or { color: var(--orange); }
+  .section-head p {
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--ink-soft);
+    max-width: 460px;
+  }
+  .service-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .service-card {
+    background: var(--bg);
+    padding: 38px 32px;
+    transition: background 0.25s;
+  }
+  .service-card:hover { background: var(--bg-2); }
+  .service-card .num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--orange);
+    letter-spacing: 1.5px;
+    margin-bottom: 22px;
+  }
+  .service-card h3 {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 24px;
+    line-height: 1.1;
+    letter-spacing: -0.5px;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin-bottom: 18px;
+  }
+  .service-card p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    margin-bottom: 24px;
+  }
+  .service-card ul {
+    list-style: none;
+    border-top: 1px solid var(--line);
+    padding-top: 18px;
+  }
+  .service-card li {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    color: var(--ink-mute);
+    padding: 5px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .service-card li::before {
+    content: '+';
+    color: var(--orange);
+    font-weight: 700;
+  }
+
+  /* WORK / PROJECTS */
+  section.work {
+    background: var(--bg-2);
+    padding: 110px 32px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .work-inner {
+    max-width: 1340px;
+    margin: 0 auto;
+  }
+  .project-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 36px;
+  }
+  .project {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    overflow: hidden;
+    transition: transform 0.3s, border-color 0.25s;
+    cursor: pointer;
+  }
+  .project:hover {
+    transform: translateY(-4px);
+    border-color: var(--orange);
+  }
+  .project-img {
+    aspect-ratio: 16/10;
+    overflow: hidden;
+    position: relative;
+  }
+  .project-img img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s;
+  }
+  .project:hover .project-img img { transform: scale(1.04); }
+  .project-img .tag {
+    position: absolute;
+    top: 16px; left: 16px;
+    background: var(--orange);
+    color: #000;
+    padding: 6px 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .project-info {
+    padding: 26px 28px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    align-items: end;
+  }
+  .project-info h4 {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 20px;
+    text-transform: uppercase;
+    letter-spacing: -0.3px;
+    margin-bottom: 8px;
+    color: var(--ink);
+  }
+  .project-info .meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-mute);
+    letter-spacing: 0.5px;
+  }
+  .project-info .arrow {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 22px;
+    color: var(--orange);
+  }
+
+  /* PROCESS */
+  section.process {
+    padding: 110px 32px;
+    max-width: 1340px;
+    margin: 0 auto;
+  }
+  .process-rail {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    margin-top: 50px;
+  }
+  .process-step {
+    background: var(--bg);
+    padding: 36px 28px;
+    position: relative;
+  }
+  .process-step .step-n {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 64px;
+    line-height: 1;
+    -webkit-text-stroke: 1.5px var(--orange);
+    color: transparent;
+    margin-bottom: 24px;
+  }
+  .process-step h4 {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    margin-bottom: 12px;
+    color: var(--ink);
+  }
+  .process-step p {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+  }
+  .process-step .tag {
+    margin-top: 18px;
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    padding-top: 12px;
+    border-top: 1px solid var(--line);
+  }
+
+  /* TESTIMONIAL */
+  section.testimonial {
+    background: var(--bg-3);
+    padding: 100px 32px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .testimonial-inner {
+    max-width: 920px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .testimonial-inner .mark {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 90px;
+    line-height: 0.7;
+    color: var(--orange);
+    margin-bottom: 18px;
+  }
+  .testimonial-inner blockquote {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: clamp(28px, 3.5vw, 46px);
+    line-height: 1.15;
+    color: var(--ink);
+    letter-spacing: -0.5px;
+    margin-bottom: 36px;
+    text-transform: uppercase;
+  }
+  .testimonial-inner blockquote .or { color: var(--orange); }
+  .testimonial-inner .src {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .testimonial-inner .src b { color: var(--orange); font-weight: 700; }
+
+  /* CTA */
+  section.cta {
+    padding: 120px 32px;
+    text-align: center;
+    background:
+      linear-gradient(180deg, rgba(14,15,17,0.7) 0%, rgba(14,15,17,0.95) 100%),
+      url('https://images.unsplash.com/photo-1581094271901-8022df4466f9?auto=format&fit=crop&w=1800&q=80') center/cover;
+  }
+  .cta-inner {
+    max-width: 920px;
+    margin: 0 auto;
+  }
+  .cta-inner .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 18px;
+  }
+  .cta-inner h2 {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: clamp(46px, 6.5vw, 96px);
+    line-height: 0.95;
+    letter-spacing: -1.2px;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin-bottom: 24px;
+  }
+  .cta-inner h2 .or { color: var(--orange); }
+  .cta-inner p {
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    max-width: 560px;
+    margin: 0 auto 36px;
+  }
+  .cta-row {
+    display: flex; gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* FOOTER */
+  footer {
+    background: #08090b;
+    padding: 70px 32px 28px;
+    border-top: 1px solid var(--line);
+  }
+  .foot-inner {
+    max-width: 1340px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 50px;
+    margin-bottom: 50px;
+  }
+  .foot-col h4 {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--ink);
+    margin-bottom: 18px;
+  }
+  .foot-brand p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    max-width: 320px;
+    margin-top: 18px;
+  }
+  .foot-col ul { list-style: none; }
+  .foot-col li {
+    padding: 5px 0;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+  .foot-col a:hover { color: var(--orange); }
+  .foot-bottom {
+    max-width: 1340px;
+    margin: 0 auto;
+    border-top: 1px solid var(--line);
+    padding-top: 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-mute);
+    letter-spacing: 0.5px;
+  }
+  .foot-bottom a { color: var(--ink-soft); }
+  .foot-bottom a:hover { color: var(--orange); }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .nav-inner { padding: 14px 20px; gap: 14px; }
+    .nav-links { display: none; }
+    .phone-pill { padding: 9px 14px; font-size: 11px; }
+    .hero { padding: 60px 20px 70px; min-height: auto; }
+    .hero-inner { grid-template-columns: 1fr; gap: 36px; }
+    .section-head { grid-template-columns: 1fr; gap: 22px; }
+    section.services, section.work, section.process, section.testimonial, section.cta {
+      padding: 70px 20px;
+    }
+    .service-grid, .project-list, .process-rail { grid-template-columns: 1fr; }
+    .foot-inner { grid-template-columns: 1fr; gap: 32px; margin-bottom: 36px; }
+    footer { padding: 50px 20px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sample-banner">
+  This is a sample build by Vanta Sites. <a href="../index.html">See more samples →</a>
+</div>
+
+<nav class="top">
+  <div class="nav-inner">
+    <div class="logo">
+      <div class="lmark"><span>I</span></div>
+      Ironside
+    </div>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#work">Past Work</a></li>
+      <li><a href="#process">Process</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="tel:+17045550143" class="phone-pill">
+      <span class="pic">☎</span> (704) 555-0143
+    </a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="stamp"><span class="dot"></span>Licensed &middot; Bonded &middot; Insured</div>
+      <h1>Built right.<br><span class="or">The first time.</span></h1>
+      <p>Ironside is a full-service contracting team handling residential remodels, additions, and ground-up builds across the Charlotte metro. Fifteen years on the tools, a fixed-bid quote up front, and a finish date we hit.</p>
+      <div class="hero-ctas">
+        <a href="#contact" class="btn">Request a quote →</a>
+        <a href="#work" class="btn outline">See past work</a>
+      </div>
+    </div>
+
+    <div class="hero-stats">
+      <div class="label">By the numbers</div>
+      <div class="stat-row">
+        <div class="k">15<span class="u">YRS</span></div>
+        <div class="lbl">In business</div>
+      </div>
+      <div class="stat-row">
+        <div class="k">280+</div>
+        <div class="lbl">Projects completed</div>
+      </div>
+      <div class="stat-row">
+        <div class="k">98<span class="u">%</span></div>
+        <div class="lbl">On-time finish rate</div>
+      </div>
+      <div class="stat-row">
+        <div class="k">5.0<span class="u">★</span></div>
+        <div class="lbl">Google rating, 140+ reviews</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="section-head">
+    <div>
+      <div class="eyebrow">// What we do</div>
+      <h2>Full builds.<br><span class="or">Honest work.</span></h2>
+    </div>
+    <p>We handle the whole job under one crew: design and permitting through final walk-through. No subcontractor maze, no quote that doubles halfway through.</p>
+  </div>
+
+  <div class="service-grid">
+
+    <div class="service-card">
+      <div class="num">SERVICE / 001</div>
+      <h3>Kitchen<br>&amp; Bath</h3>
+      <p>Full gut-and-rebuild kitchens and bathrooms. Cabinetry, plumbing, tile, electrical, finish work, the whole thing.</p>
+      <ul>
+        <li>Custom cabinetry</li>
+        <li>Tile &amp; stone</li>
+        <li>Plumbing rough-in</li>
+        <li>Electrical updates</li>
+      </ul>
+    </div>
+
+    <div class="service-card">
+      <div class="num">SERVICE / 002</div>
+      <h3>Additions<br>&amp; Remodels</h3>
+      <p>Room additions, second-story builds, garage conversions, basement finishes. Permitted, engineered, and finished to match.</p>
+      <ul>
+        <li>Structural engineering</li>
+        <li>Permits handled</li>
+        <li>Framing to finish</li>
+        <li>Match existing trim</li>
+      </ul>
+    </div>
+
+    <div class="service-card">
+      <div class="num">SERVICE / 003</div>
+      <h3>New<br>Construction</h3>
+      <p>Single-family residential builds from broken ground to closing. Lot evaluation, plans, permits, build, and warranty.</p>
+      <ul>
+        <li>Custom home design</li>
+        <li>Full project management</li>
+        <li>Energy-efficient builds</li>
+        <li>1-year workmanship warranty</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- WORK -->
+<section class="work" id="work">
+  <div class="work-inner">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">// Past work</div>
+        <h2>Recent<br><span class="or">projects.</span></h2>
+      </div>
+      <p>A few of the jobs we have wrapped in the last twelve months. We can put you in touch with any of these clients if you want to verify the work.</p>
+    </div>
+
+    <div class="project-list">
+
+      <a href="#" class="project">
+        <div class="project-img">
+          <span class="tag">Kitchen remodel</span>
+          <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=1400&q=80" alt="Kitchen remodel" />
+        </div>
+        <div class="project-info">
+          <div>
+            <h4>The Whitmore Kitchen</h4>
+            <div class="meta">Plaza Midwood &middot; 8 weeks &middot; 2025</div>
+          </div>
+          <div class="arrow">→</div>
+        </div>
+      </a>
+
+      <a href="#" class="project">
+        <div class="project-img">
+          <span class="tag">Full remodel</span>
+          <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&q=80" alt="Home remodel" />
+        </div>
+        <div class="project-info">
+          <div>
+            <h4>The Harlan Residence</h4>
+            <div class="meta">Myers Park &middot; 14 weeks &middot; 2025</div>
+          </div>
+          <div class="arrow">→</div>
+        </div>
+      </a>
+
+      <a href="#" class="project">
+        <div class="project-img">
+          <span class="tag">Addition</span>
+          <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1400&q=80" alt="Home addition" />
+        </div>
+        <div class="project-info">
+          <div>
+            <h4>Second-Story Addition</h4>
+            <div class="meta">Dilworth &middot; 18 weeks &middot; 2024</div>
+          </div>
+          <div class="arrow">→</div>
+        </div>
+      </a>
+
+      <a href="#" class="project">
+        <div class="project-img">
+          <span class="tag">New build</span>
+          <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1400&q=80" alt="New construction" />
+        </div>
+        <div class="project-info">
+          <div>
+            <h4>Linden Avenue Build</h4>
+            <div class="meta">Eastover &middot; 9 months &middot; 2024</div>
+          </div>
+          <div class="arrow">→</div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process">
+  <div class="section-head">
+    <div>
+      <div class="eyebrow">// How we work</div>
+      <h2>Four steps.<br><span class="or">No surprises.</span></h2>
+    </div>
+    <p>Same process, every project. You know exactly where the job is, what is happening next, and what it will cost before we lift a hammer.</p>
+  </div>
+
+  <div class="process-rail">
+
+    <div class="process-step">
+      <div class="step-n">01</div>
+      <h4>Site Visit</h4>
+      <p>We come out, walk the property, listen to what you want, and take measurements. Usually 45 minutes. No charge for the first visit.</p>
+      <div class="tag">No cost &middot; ~45 min</div>
+    </div>
+
+    <div class="process-step">
+      <div class="step-n">02</div>
+      <h4>Fixed Quote</h4>
+      <p>Within five business days you get a written, fixed-bid quote. Materials, labor, timeline, and contingencies all spelled out plainly.</p>
+      <div class="tag">5 business days</div>
+    </div>
+
+    <div class="process-step">
+      <div class="step-n">03</div>
+      <h4>Build</h4>
+      <p>One crew, daily updates, weekly photos. You always have a number to call. If something changes, you hear about it before it changes.</p>
+      <div class="tag">Weekly updates</div>
+    </div>
+
+    <div class="process-step">
+      <div class="step-n">04</div>
+      <h4>Walk-Through</h4>
+      <p>Final inspection together, punch list addressed within ten days, paperwork signed, one-year workmanship warranty starts.</p>
+      <div class="tag">1-year warranty</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section class="testimonial">
+  <div class="testimonial-inner">
+    <div class="mark">"</div>
+    <blockquote>
+      They finished a week early <span class="or">and came in under budget.</span> I did not think that was a thing contractors did anymore.
+    </blockquote>
+    <div class="src"><b>SARAH H.</b> &nbsp;//&nbsp; Plaza Midwood, Kitchen remodel, 2025</div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="contact">
+  <div class="cta-inner">
+    <div class="eyebrow">// Ready to start?</div>
+    <h2>Let's talk<br>about <span class="or">your project.</span></h2>
+    <p>Site visits are free. We respond to every inquiry within one business day. Tell us what you are thinking and we will tell you what it costs.</p>
+    <div class="cta-row">
+      <a href="tel:+17045550143" class="btn">Call (704) 555-0143</a>
+      <a href="#" class="btn outline">Request a quote</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-inner">
+    <div class="foot-col foot-brand">
+      <div class="logo">
+        <div class="lmark"><span>I</span></div>
+        Ironside Contracting
+      </div>
+      <p>A licensed, bonded, and insured general contracting firm serving the greater Charlotte area. NC General Contractor License #84920.</p>
+    </div>
+    <div class="foot-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#services">Kitchen &amp; Bath</a></li>
+        <li><a href="#services">Additions</a></li>
+        <li><a href="#services">New Construction</a></li>
+        <li><a href="#services">Remodels</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>Office</h4>
+      <ul>
+        <li>402 Industrial Drive</li>
+        <li>Charlotte, NC 28206</li>
+        <li>(704) 555-0143</li>
+        <li>hello@ironsidenc.com</li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>Hours</h4>
+      <ul>
+        <li>Mon–Fri &middot; 7am–5pm</li>
+        <li>Sat &middot; By appointment</li>
+        <li>24/7 emergency line for clients</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <div>© 2026 IRONSIDE CONTRACTING LLC // SAMPLE BUILD BY VANTA SITES</div>
+    <div><a href="../index.html">VANTASITES.COM</a></div>
+  </div>
+</footer>
+
+</body>
+</html>
