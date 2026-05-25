@@ -1,0 +1,2282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="theme-color" content="#1a2b50"/>
+<title>Vanta Sites · Custom Websites, Built Fast</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; cursor: none !important; }
+  *::before, *::after { cursor: none !important; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #f5f5f4;
+    color: #1a1f2e;
+    font-family: 'Inter', sans-serif;
+    cursor: none;
+  }
+
+  :root {
+    --navy: #1a2b50;
+    --navy-dark: #11203f;
+    --navy-soft: #2d4373;
+    --bg: #f5f5f4;
+    --bg-2: #ffffff;
+    --gray-100: #ececea;
+    --gray-200: #d8d8d6;
+    --gray-300: #a8a8a4;
+    --gray-400: #6e6e6a;
+    --gray-500: #4a4a48;
+    --text-strong: #1a1f2e;
+    --text-soft: rgba(26, 31, 46, 0.7);
+    --text-muted: rgba(26, 31, 46, 0.5);
+  }
+
+  /* ---------- BG TRACK ---------- */
+  .bg-track {
+    position: fixed; inset: 0;
+    width: 200vw; height: 100vh;
+    display: flex;
+    will-change: transform;
+    transition: transform 1.4s cubic-bezier(0.77, 0, 0.175, 1);
+    z-index: 1;
+  }
+  .bg-slide { position: relative; width: 100vw; height: 100vh; flex-shrink: 0; overflow: hidden; }
+  .bg-image {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, #ffffff 0%, #f0f0ee 50%, #e6e6e3 100%);
+  }
+  /* Subtle architectural grid texture */
+  .bg-image::before {
+    content: ''; position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(26, 43, 80, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(26, 43, 80, 0.04) 1px, transparent 1px);
+    background-size: 80px 80px;
+    background-position: 0 0;
+  }
+  .bg-image::after {
+    content: ''; position: absolute; inset: 0;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(26, 43, 80, 0.06) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(26, 43, 80, 0.04) 0%, transparent 50%);
+  }
+
+  /* ---------- NAV ---------- */
+  nav.top-nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    height: 70px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 50px;
+    z-index: 100;
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    background: rgba(245, 245, 244, 0.85);
+    border-bottom: 1px solid rgba(26, 31, 46, 0.08);
+  }
+  .logo {
+    font-family: 'Fraunces', serif;
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    display: flex; align-items: center; gap: 14px;
+    color: var(--gray-500);
+  }
+  .logo .logo-mark {
+    width: 22px; height: 22px;
+    border: 2px solid var(--gray-400);
+    transform: rotate(45deg);
+    position: relative;
+  }
+  .logo .logo-mark::after {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    background: var(--gray-400);
+  }
+  .nav-links {
+    display: flex; gap: 36px; list-style: none;
+    font-size: 14px; font-weight: 500;
+    letter-spacing: 0.2px;
+  }
+  .nav-links li {
+    position: relative;
+    color: var(--text-soft);
+    transition: color 0.25s;
+  }
+  .nav-links li:hover { color: var(--navy); }
+  .nav-links li::before {
+    content: ''; position: absolute;
+    bottom: -8px; left: 0;
+    width: 0; height: 2px;
+    background: var(--navy);
+    transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .nav-links li:hover::before { width: 100%; }
+  .nav-links li.active { color: var(--navy); font-weight: 600; }
+  .nav-links li.active::before { width: 100%; }
+  .nav-right {
+    display: flex; align-items: center; gap: 28px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text-soft);
+  }
+  .nav-right .status {
+    display: flex; gap: 10px; align-items: center;
+    padding: 7px 14px;
+    background: rgba(26, 43, 80, 0.06);
+    border: 1px solid rgba(26, 43, 80, 0.1);
+    border-radius: 100px;
+  }
+  .nav-right .status .live-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #2da563;
+    box-shadow: 0 0 0 3px rgba(45, 165, 99, 0.2);
+    animation: livePulse 2s ease-in-out infinite;
+  }
+  @keyframes livePulse {
+    0%, 100% { box-shadow: 0 0 0 3px rgba(45, 165, 99, 0.2); }
+    50% { box-shadow: 0 0 0 5px rgba(45, 165, 99, 0.1); }
+  }
+  .nav-right .status .label {
+    color: var(--navy);
+    font-weight: 500;
+    letter-spacing: 0.3px;
+  }
+
+  /* ---------- CORNER MARKS ---------- */
+  .corner {
+    position: fixed; width: 32px; height: 32px;
+    border-color: var(--navy);
+    z-index: 40; pointer-events: none;
+    opacity: 0.4;
+  }
+  .corner.tl { top: 90px; left: 30px; border-top: 1px solid; border-left: 1px solid; }
+  .corner.tr { top: 90px; right: 30px; border-top: 1px solid; border-right: 1px solid; }
+  .corner.bl { bottom: 90px; left: 30px; border-bottom: 1px solid; border-left: 1px solid; }
+  .corner.br { bottom: 90px; right: 30px; border-bottom: 1px solid; border-right: 1px solid; }
+
+  /* ---------- SECTION SYSTEM ---------- */
+  .section {
+    position: fixed; inset: 0;
+    z-index: 20;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.6s ease, visibility 0.6s;
+  }
+  .section.active {
+    pointer-events: auto;
+    opacity: 1;
+    visibility: visible;
+  }
+  .section > * { pointer-events: auto; }
+
+  /* ==================== HOME ==================== */
+  .home-wrap {
+    position: absolute;
+    top: 110px; left: 70px; right: 70px; bottom: 90px;
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 80px;
+    align-items: center;
+  }
+  /* Featured diamond logo block */
+  .home-mark {
+    position: relative;
+    aspect-ratio: 1;
+    max-width: 460px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .home-mark .mark-frame {
+    position: absolute; inset: 0;
+    background: #fff;
+    border: 1px solid rgba(26, 31, 46, 0.1);
+    box-shadow:
+      0 30px 60px -20px rgba(26, 43, 80, 0.18),
+      0 18px 36px -12px rgba(26, 43, 80, 0.1);
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  /* Subtle grid texture inside the frame */
+  .home-mark .mark-frame::before {
+    content: ''; position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(26, 43, 80, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(26, 43, 80, 0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  /* Corner ticks inside the frame */
+  .home-mark .frame-tick {
+    position: absolute;
+    width: 20px; height: 20px;
+    z-index: 2;
+  }
+  .home-mark .frame-tick.tl { top: 18px; left: 18px; border-top: 1px solid var(--gray-300); border-left: 1px solid var(--gray-300); }
+  .home-mark .frame-tick.tr { top: 18px; right: 18px; border-top: 1px solid var(--gray-300); border-right: 1px solid var(--gray-300); }
+  .home-mark .frame-tick.bl { bottom: 18px; left: 18px; border-bottom: 1px solid var(--gray-300); border-left: 1px solid var(--gray-300); }
+  .home-mark .frame-tick.br { bottom: 18px; right: 18px; border-bottom: 1px solid var(--gray-300); border-right: 1px solid var(--gray-300); }
+  /* The big featured diamond */
+  .home-mark .big-diamond {
+    width: clamp(140px, 18vw, 230px);
+    height: clamp(140px, 18vw, 230px);
+    border: 3px solid var(--gray-400);
+    transform: rotate(45deg);
+    position: relative;
+    z-index: 2;
+  }
+  .home-mark .big-diamond::after {
+    content: '';
+    position: absolute;
+    inset: 22px;
+    background: var(--gray-400);
+  }
+  .home-mark .mark-label {
+    position: absolute;
+    bottom: 26px; left: 50%;
+    transform: translateX(-50%);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--gray-400);
+    letter-spacing: 4px;
+    z-index: 3;
+  }
+  .home-mark .mark-tagline {
+    position: absolute;
+    top: -14px; left: -14px;
+    background: var(--bg);
+    padding: 6px 14px;
+    border: 1px solid rgba(26, 43, 80, 0.15);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--gray-500);
+    letter-spacing: 1px;
+    z-index: 3;
+  }
+
+  /* Home content right side */
+  .home-content {
+    max-width: 640px;
+  }
+  .home-eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 7px 14px;
+    background: rgba(26, 43, 80, 0.06);
+    border: 1px solid rgba(26, 43, 80, 0.12);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--navy);
+    letter-spacing: 0.5px;
+    margin-bottom: 28px;
+  }
+  .home-eyebrow .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #2da563;
+  }
+  .home-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(48px, 6vw, 84px);
+    line-height: 1.02;
+    font-weight: 500;
+    color: var(--navy);
+    letter-spacing: -2px;
+    margin-bottom: 24px;
+  }
+  .home-title .italic {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--navy-soft);
+  }
+  .home-sub {
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--gray-500);
+    max-width: 500px;
+    margin-bottom: 36px;
+  }
+  .home-ctas {
+    display: flex; gap: 14px; align-items: center; flex-wrap: wrap;
+  }
+  .btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    padding: 16px 28px;
+    border: none;
+    background: var(--navy);
+    color: #fff;
+    display: inline-flex; align-items: center; gap: 10px;
+    position: relative; overflow: hidden;
+    transition: background 0.25s, transform 0.25s, box-shadow 0.25s;
+    box-shadow: 0 4px 14px rgba(26, 43, 80, 0.2);
+  }
+  .btn:hover {
+    background: var(--navy-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 22px rgba(26, 43, 80, 0.28);
+  }
+  .btn .arrow { font-size: 16px; line-height: 1; transition: transform 0.25s; }
+  .btn:hover .arrow { transform: translateX(3px); }
+  .btn.ghost {
+    background: transparent;
+    color: var(--navy);
+    border: 1px solid var(--navy);
+    box-shadow: none;
+    padding: 15px 27px;
+  }
+  .btn.ghost:hover {
+    background: var(--navy);
+    color: #fff;
+  }
+
+  /* Quick trust row under CTAs */
+  .trust-row {
+    margin-top: 36px;
+    padding-top: 28px;
+    border-top: 1px solid rgba(26, 31, 46, 0.1);
+    display: flex; gap: 36px;
+    flex-wrap: wrap;
+  }
+  .trust-item .num {
+    font-family: 'Fraunces', serif;
+    font-size: 32px;
+    font-weight: 500;
+    color: var(--navy);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .trust-item .num .small {
+    font-size: 16px;
+    color: var(--gray-400);
+    margin-left: 2px;
+  }
+  .trust-item .lbl {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--gray-400);
+    letter-spacing: 0.5px;
+  }
+
+  /* ==================== SERVICES ==================== */
+  .services-wrap {
+    position: absolute;
+    top: 50%; left: 70px; right: 70px;
+    transform: translateY(-50%);
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 70px;
+    align-items: center;
+  }
+  .section-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--navy);
+    letter-spacing: 1px;
+    margin-bottom: 22px;
+    padding: 5px 12px;
+    background: rgba(26, 43, 80, 0.06);
+    border: 1px solid rgba(26, 43, 80, 0.1);
+  }
+  .services-left h2 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(46px, 6vw, 78px);
+    line-height: 1.02;
+    font-weight: 500;
+    color: var(--navy);
+    letter-spacing: -2px;
+    margin-bottom: 24px;
+  }
+  .services-left h2 .italic {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--navy-soft);
+  }
+  .services-left p {
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--gray-500);
+    max-width: 420px;
+    margin-bottom: 18px;
+  }
+  .price-card {
+    padding: 36px 38px;
+    background: #fff;
+    border: 1px solid rgba(26, 31, 46, 0.1);
+    box-shadow:
+      0 25px 50px -20px rgba(26, 43, 80, 0.18),
+      0 12px 25px -10px rgba(26, 43, 80, 0.1);
+    position: relative;
+  }
+  .price-card .card-tag {
+    position: absolute;
+    top: -1px; left: 30px;
+    padding: 6px 14px;
+    background: var(--navy);
+    color: #fff;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+  }
+  .price-head {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 22px;
+    margin-top: 16px;
+    border-bottom: 1px solid var(--gray-100);
+  }
+  .price-head .pname {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--navy);
+  }
+  .price-head .pflat {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--gray-400);
+    letter-spacing: 0.5px;
+  }
+  .price-main {
+    display: flex; align-items: baseline; gap: 8px;
+    margin-bottom: 28px;
+  }
+  .price-main .dollar {
+    font-family: 'Fraunces', serif;
+    font-size: 36px;
+    font-weight: 500;
+    color: var(--gray-400);
+  }
+  .price-main .amount {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(72px, 8vw, 110px);
+    font-weight: 600;
+    line-height: 1;
+    color: var(--navy);
+    letter-spacing: -3px;
+  }
+  .price-main .per {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: var(--gray-400);
+    align-self: flex-end;
+    padding-bottom: 12px;
+    margin-left: 6px;
+  }
+  .price-list {
+    list-style: none;
+    margin-bottom: 28px;
+  }
+  .price-list li {
+    font-size: 15px;
+    color: var(--text-strong);
+    padding: 11px 0;
+    display: flex; align-items: flex-start; gap: 14px;
+    border-bottom: 1px solid var(--gray-100);
+  }
+  .price-list li:last-child { border-bottom: none; }
+  .price-list li .check {
+    flex-shrink: 0;
+    width: 18px; height: 18px;
+    background: var(--navy);
+    color: #fff;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px;
+    margin-top: 3px;
+    font-weight: 700;
+  }
+  .price-foot {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-top: 22px;
+    border-top: 1px solid var(--gray-100);
+  }
+  .price-foot .foot-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--gray-400);
+    letter-spacing: 0.5px;
+  }
+  .price-foot .foot-val {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--navy);
+  }
+  .negotiable-note {
+    margin-top: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--gray-400);
+    text-align: center;
+    letter-spacing: 0.3px;
+  }
+
+  /* ==================== STUDIO ==================== */
+  .studio-wrap {
+    position: absolute;
+    top: 50%; left: 70px; right: 70px;
+    transform: translateY(-50%);
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 70px;
+    align-items: center;
+  }
+  .studio-left h2 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(48px, 6.5vw, 90px);
+    line-height: 1.02;
+    font-weight: 500;
+    color: var(--navy);
+    letter-spacing: -2px;
+    margin-bottom: 28px;
+  }
+  .studio-left h2 .italic {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--navy-soft);
+  }
+  .studio-left p {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--gray-500);
+    max-width: 540px;
+    margin-bottom: 18px;
+  }
+  .studio-right {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .studio-stat {
+    padding: 26px 24px;
+    background: #fff;
+    border: 1px solid rgba(26, 31, 46, 0.1);
+    box-shadow: 0 8px 22px -10px rgba(26, 43, 80, 0.12);
+    position: relative;
+  }
+  .studio-stat .big {
+    font-family: 'Fraunces', serif;
+    font-size: 48px;
+    font-weight: 500;
+    line-height: 1;
+    color: var(--navy);
+    letter-spacing: -1.5px;
+    margin-bottom: 12px;
+  }
+  .studio-stat .big .small-unit {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--gray-400);
+    margin-left: 6px;
+    font-weight: 400;
+    letter-spacing: 0.3px;
+  }
+  .studio-stat .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--gray-400);
+    letter-spacing: 0.5px;
+  }
+  .studio-team-row {
+    grid-column: 1 / -1;
+    display: flex; align-items: center; gap: 16px;
+    padding: 22px 24px;
+    background: var(--navy);
+    color: #fff;
+  }
+  .avatar-stack { display: flex; gap: 14px; align-items: center; }
+  .avatar-stack .av {
+    width: 18px; height: 18px;
+    border: 2px solid #fff;
+    transform: rotate(45deg);
+    position: relative;
+    opacity: 0.55;
+  }
+  .avatar-stack .av.primary {
+    opacity: 1;
+  }
+  .avatar-stack .av::after {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    background: #fff;
+  }
+  .avatar-stack .av.primary::after { background: #fff; }
+  .avatar-stack .av:not(.primary)::after { background: rgba(255,255,255,0.55); }
+  .studio-team-row .team-info .t1 {
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    font-weight: 500;
+    letter-spacing: -0.3px;
+  }
+  .studio-team-row .team-info .t2 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: rgba(255,255,255,0.6);
+    letter-spacing: 0.3px;
+    margin-top: 4px;
+  }
+
+  /* ==================== CONTACT ==================== */
+  /* Contact has more content than other sections, so it scrolls within its viewport */
+  #section-contact.active {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    /* Stop the scroll from going behind the nav and ticker */
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  /* Hide scrollbar visually but keep functionality */
+  #section-contact::-webkit-scrollbar { width: 6px; }
+  #section-contact::-webkit-scrollbar-track { background: transparent; }
+  #section-contact::-webkit-scrollbar-thumb {
+    background: rgba(26, 31, 46, 0.15);
+    border-radius: 3px;
+  }
+  #section-contact::-webkit-scrollbar-thumb:hover { background: rgba(26, 31, 46, 0.3); }
+  .contact-wrap {
+    position: relative;
+    margin: 0 70px;
+    padding: 110px 0 90px;
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 70px;
+    align-items: start;
+  }
+  .contact-wrap .contact-left {
+    position: sticky;
+    top: 110px;
+    align-self: start;
+  }
+  .contact-left h2 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(56px, 7.5vw, 100px);
+    line-height: 1;
+    font-weight: 500;
+    color: var(--navy);
+    letter-spacing: -2.5px;
+    margin-bottom: 24px;
+  }
+  .contact-left h2 .italic {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--navy-soft);
+  }
+  .contact-left p {
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--gray-500);
+    max-width: 460px;
+    margin-bottom: 16px;
+  }
+  .contact-right {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .contact-block {
+    background: #fff;
+    border: 1px solid rgba(26, 31, 46, 0.1);
+    box-shadow:
+      0 12px 28px -16px rgba(26, 43, 80, 0.15),
+      0 6px 14px -8px rgba(26, 43, 80, 0.08);
+    padding: 28px 32px;
+  }
+  .contact-block .blabel {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--gray-400);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .contact-block .blabel .indicator {
+    width: 24px; height: 1px; background: var(--navy);
+  }
+  .contact-block .phone-row {
+    display: flex; align-items: center; gap: 14px;
+    padding: 10px 0;
+    text-decoration: none;
+    color: inherit;
+    transition: opacity 0.2s;
+  }
+  .contact-block a.phone-row:hover { opacity: 0.75; }
+  .contact-block .phone-row .icon {
+    width: 36px; height: 36px;
+    background: var(--navy);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .contact-block .phone-row .num {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--navy);
+    letter-spacing: -0.3px;
+  }
+  .contact-block .phone-row .who {
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--gray-400);
+    letter-spacing: 0.3px;
+  }
+  .contact-block.zelle-block {
+    background: linear-gradient(135deg, #fafafa 0%, #f0f0ee 100%);
+  }
+  .contact-block.zelle-block .zelle-tag {
+    display: inline-block;
+    padding: 3px 10px;
+    background: var(--navy);
+    color: #fff;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+  }
+  .contact-block.zelle-block p.zelle-note {
+    font-size: 13px;
+    color: var(--gray-500);
+    line-height: 1.5;
+    margin-top: 12px;
+  }
+
+  /* Email row variant */
+  .contact-block .phone-row.email-row .num {
+    font-size: 19px;
+    word-break: break-all;
+  }
+
+  /* Contact form block */
+  .contact-block.form-block {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%);
+    color: #fff;
+    position: relative;
+  }
+  .contact-block.form-block .blabel {
+    color: rgba(255, 255, 255, 0.6);
+  }
+  .contact-block.form-block .blabel .indicator {
+    background: #fff;
+  }
+  .contact-form {
+    display: flex; flex-direction: column;
+    gap: 18px;
+    margin-top: 6px;
+  }
+  .contact-form .form-row {
+    display: flex; flex-direction: column;
+    gap: 8px;
+  }
+  .contact-form label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.65);
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+  }
+  .contact-form input,
+  .contact-form textarea {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    padding: 12px 14px;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+    resize: none;
+  }
+  .contact-form input::placeholder,
+  .contact-form textarea::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+  }
+  .contact-form input:focus,
+  .contact-form textarea:focus {
+    border-color: rgba(255, 255, 255, 0.55);
+    background: rgba(255, 255, 255, 0.12);
+  }
+  .contact-form input[aria-invalid="true"],
+  .contact-form textarea[aria-invalid="true"] {
+    border-color: #ff8a8a;
+    background: rgba(255, 138, 138, 0.08);
+  }
+  .contact-form .form-submit {
+    margin-top: 8px;
+    background: #fff;
+    color: var(--navy);
+    border: 1px solid #fff;
+    justify-content: center;
+    width: 100%;
+    box-shadow: none;
+  }
+  .contact-form .form-submit:hover {
+    background: var(--bg-2);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+  }
+  .contact-form .form-submit[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+  .contact-form .form-status {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #ff8a8a;
+    min-height: 0;
+    letter-spacing: 0.3px;
+  }
+  .contact-form .form-status.show {
+    min-height: 18px;
+    margin-top: 4px;
+  }
+  .form-success {
+    display: none;
+    padding: 20px 4px 8px;
+    text-align: center;
+    color: #fff;
+  }
+  .form-success.show { display: block; }
+  .form-success .success-mark {
+    width: 48px; height: 48px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 14px;
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+  }
+  .form-success .success-title {
+    font-family: 'Fraunces', serif;
+    font-size: 28px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    letter-spacing: -0.5px;
+  }
+  .form-success .success-text {
+    font-size: 14px;
+    line-height: 1.55;
+    color: rgba(255, 255, 255, 0.8);
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  /* ==================== FAQ ==================== */
+  /* FAQ also scrolls within its viewport so all questions can be reached */
+  #section-faq.active {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  #section-faq::-webkit-scrollbar { width: 6px; }
+  #section-faq::-webkit-scrollbar-track { background: transparent; }
+  #section-faq::-webkit-scrollbar-thumb {
+    background: rgba(26, 31, 46, 0.15);
+    border-radius: 3px;
+  }
+  #section-faq::-webkit-scrollbar-thumb:hover { background: rgba(26, 31, 46, 0.3); }
+  .faq-wrap {
+    position: relative;
+    margin: 0 70px;
+    padding: 110px 0 90px;
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 0.85fr 1.4fr;
+    gap: 70px;
+    align-items: start;
+  }
+  .faq-wrap .faq-left {
+    position: sticky;
+    top: 110px;
+    align-self: start;
+  }
+  .faq-left h2 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(48px, 6.5vw, 88px);
+    line-height: 1.02;
+    font-weight: 500;
+    color: var(--navy);
+    letter-spacing: -2px;
+    margin-bottom: 24px;
+  }
+  .faq-left h2 .italic {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--navy-soft);
+  }
+  .faq-left p {
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--gray-500);
+    max-width: 380px;
+  }
+  .faq-list {
+    list-style: none;
+    background: #fff;
+    border: 1px solid rgba(26, 31, 46, 0.1);
+    box-shadow:
+      0 25px 50px -20px rgba(26, 43, 80, 0.18),
+      0 12px 25px -10px rgba(26, 43, 80, 0.1);
+  }
+  .faq-item {
+    border-bottom: 1px solid var(--gray-100);
+  }
+  .faq-item:last-child { border-bottom: none; }
+  .faq-q {
+    padding: 22px 30px;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 20px;
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--navy);
+    letter-spacing: -0.3px;
+    user-select: none;
+  }
+  .faq-q .qmark {
+    flex-shrink: 0;
+    width: 28px; height: 28px;
+    border: 1px solid var(--gray-200);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: var(--navy);
+    transition: transform 0.3s, background 0.25s, color 0.25s, border-color 0.25s;
+  }
+  .faq-item.open .faq-q .qmark {
+    background: var(--navy);
+    color: #fff;
+    border-color: var(--navy);
+    transform: rotate(45deg);
+  }
+  .faq-a {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .faq-a-inner {
+    padding: 0 30px 24px;
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--gray-500);
+  }
+  .faq-item.open .faq-a {
+    max-height: 240px;
+  }
+
+  /* ==================== WORK ==================== */
+  /* Work also scrolls within its viewport */
+  #section-work.active {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  #section-work::-webkit-scrollbar { width: 6px; }
+  #section-work::-webkit-scrollbar-track { background: transparent; }
+  #section-work::-webkit-scrollbar-thumb {
+    background: rgba(26, 31, 46, 0.15);
+    border-radius: 3px;
+  }
+  #section-work::-webkit-scrollbar-thumb:hover { background: rgba(26, 31, 46, 0.3); }
+  .work-wrap {
+    position: relative;
+    margin: 0 70px;
+    padding: 110px 0 90px;
+    min-height: 100vh;
+  }
+  .work-head {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: end;
+    margin-bottom: 56px;
+  }
+  .work-head .left .section-eyebrow {
+    margin-bottom: 18px;
+  }
+  .work-head h2 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(48px, 6.5vw, 88px);
+    line-height: 1.02;
+    font-weight: 500;
+    color: var(--navy);
+    letter-spacing: -2px;
+  }
+  .work-head h2 .italic {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--navy-soft);
+  }
+  .work-head .right p {
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--gray-500);
+    max-width: 460px;
+  }
+  .work-sample-notice {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 14px;
+    background: rgba(26, 43, 80, 0.06);
+    border: 1px solid rgba(26, 43, 80, 0.12);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--navy);
+    letter-spacing: 0.5px;
+    margin-top: 14px;
+  }
+  .work-sample-notice .dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--navy);
+  }
+  .work-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+  }
+  .work-card {
+    background: #fff;
+    border: 1px solid rgba(26, 31, 46, 0.1);
+    box-shadow:
+      0 12px 28px -16px rgba(26, 43, 80, 0.15),
+      0 6px 14px -8px rgba(26, 43, 80, 0.08);
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+  }
+  .work-card:hover {
+    transform: translateY(-4px);
+    box-shadow:
+      0 24px 50px -20px rgba(26, 43, 80, 0.28),
+      0 12px 25px -10px rgba(26, 43, 80, 0.15);
+    border-color: var(--navy);
+  }
+  .work-thumb {
+    aspect-ratio: 4/3;
+    overflow: hidden;
+    background: var(--gray-100);
+    position: relative;
+  }
+  .work-thumb img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+  .work-card:hover .work-thumb img { transform: scale(1.04); }
+  .work-thumb .tag {
+    position: absolute;
+    top: 16px; left: 16px;
+    background: var(--navy);
+    color: #fff;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    padding: 5px 11px;
+  }
+  .work-info {
+    padding: 24px 26px 26px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  .work-info h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 24px;
+    font-weight: 500;
+    color: var(--navy);
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+  .work-info h3 .italic {
+    font-style: italic;
+    color: var(--navy-soft);
+    font-weight: 400;
+  }
+  .work-info .industry {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--gray-400);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .work-info p {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--gray-500);
+    margin-bottom: 18px;
+    flex: 1;
+  }
+  .work-info .visit-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy);
+    letter-spacing: 0.2px;
+    border-top: 1px solid var(--gray-100);
+    padding-top: 16px;
+    margin-top: auto;
+  }
+  .work-info .visit-link .arrow {
+    transition: transform 0.25s;
+  }
+  .work-card:hover .work-info .visit-link .arrow {
+    transform: translateX(4px);
+  }
+  /* Bottom note: yours-would-be-custom */
+  .work-footer-note {
+    margin-top: 50px;
+    padding: 26px 32px;
+    background: var(--navy);
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .work-footer-note .text {
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    line-height: 1.3;
+    font-weight: 500;
+    max-width: 600px;
+  }
+  .work-footer-note .text .italic {
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 400;
+  }
+  .work-footer-note .btn-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #fff;
+    color: var(--navy);
+    padding: 14px 22px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    transition: transform 0.2s, background 0.2s;
+    border: none;
+    cursor: pointer;
+  }
+  .work-footer-note .btn-link:hover {
+    background: var(--bg-2);
+    transform: translateY(-1px);
+  }
+
+  .ticker {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 38px;
+    background: var(--navy);
+    overflow: hidden;
+    z-index: 45;
+    display: flex; align-items: center;
+  }
+  .ticker .ticker-label {
+    flex-shrink: 0;
+    background: #fff;
+    color: var(--navy);
+    height: 100%;
+    display: flex; align-items: center;
+    padding: 0 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    font-weight: 600;
+  }
+  .ticker-track-wrap {
+    flex: 1; overflow: hidden; position: relative;
+    height: 100%; display: flex; align-items: center;
+  }
+  .ticker-track {
+    display: flex; white-space: nowrap;
+    animation: tickerScroll 55s linear infinite;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    color: rgba(255,255,255,0.9);
+  }
+  .ticker-track span {
+    padding: 0 28px;
+    display: inline-flex; align-items: center; gap: 14px;
+  }
+  .ticker-track span::after {
+    content: '◆'; color: rgba(255,255,255,0.4); font-size: 8px;
+  }
+  @keyframes tickerScroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ---------- AI + FINE PRINT ---------- */
+  .ai-disclosure {
+    position: fixed;
+    bottom: 46px; left: 50%;
+    transform: translateX(-50%);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 7px;
+    color: var(--gray-300);
+    z-index: 35; text-align: center;
+    pointer-events: none; white-space: nowrap;
+    letter-spacing: 0.2px;
+    opacity: 0.85;
+  }
+  .ai-disclosure .ai-dot {
+    display: inline-block;
+    width: 2px; height: 2px; border-radius: 50%;
+    background: var(--gray-300);
+    margin: 0 6px; vertical-align: middle;
+  }
+
+  /* ---------- CUSTOM CURSOR ---------- */
+  .cursor {
+    position: fixed;
+    width: 30px; height: 30px;
+    border: 1px solid var(--navy);
+    border-radius: 50%;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: width 0.2s, height 0.2s, background 0.2s;
+    will-change: transform;
+  }
+  .cursor.hover {
+    width: 50px; height: 50px;
+    background: rgba(26, 43, 80, 0.1);
+  }
+  .cursor-dot {
+    position: fixed;
+    width: 5px; height: 5px;
+    background: var(--navy);
+    border-radius: 50%;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%, -50%);
+    will-change: transform;
+  }
+
+  /* ---------- MOBILE MENU ---------- */
+  .mobile-toggle {
+    display: none;
+    width: 38px; height: 38px;
+    background: transparent;
+    border: 1px solid rgba(26, 31, 46, 0.15);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 0;
+  }
+  .mobile-toggle span {
+    display: block;
+    width: 16px;
+    height: 1.5px;
+    background: var(--navy);
+    transition: transform 0.25s, opacity 0.2s;
+  }
+  .mobile-toggle.open span:nth-child(1) { transform: translateY(5.5px) rotate(45deg); }
+  .mobile-toggle.open span:nth-child(2) { opacity: 0; }
+  .mobile-toggle.open span:nth-child(3) { transform: translateY(-5.5px) rotate(-45deg); }
+
+  .mobile-menu {
+    position: fixed;
+    top: 60px; left: 0; right: 0;
+    background: #fff;
+    border-bottom: 1px solid rgba(26, 31, 46, 0.1);
+    box-shadow: 0 12px 24px -8px rgba(26, 43, 80, 0.15);
+    transform: translateY(-110%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 95;
+    display: none;
+  }
+  .mobile-menu.open { transform: translateY(0); }
+  .mobile-menu ul { list-style: none; padding: 12px 0; }
+  .mobile-menu li {
+    padding: 16px 22px;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-strong);
+    border-bottom: 1px solid var(--gray-100);
+    cursor: pointer;
+  }
+  .mobile-menu li:last-child { border-bottom: none; }
+  .mobile-menu li.active {
+    color: var(--navy);
+    font-weight: 600;
+    background: rgba(26, 43, 80, 0.04);
+  }
+
+  @media (max-width: 768px) {
+    .mobile-toggle { display: flex; }
+    .mobile-menu { display: block; }
+  }
+
+  @media (max-width: 1100px) {
+    .home-wrap, .services-wrap, .studio-wrap, .faq-wrap, .contact-wrap {
+      grid-template-columns: 1fr; gap: 40px;
+    }
+    .work-head { grid-template-columns: 1fr; gap: 24px; }
+    .work-grid { grid-template-columns: repeat(2, 1fr); }
+    .home-mark { margin: 0 auto; max-width: 320px; }
+  }
+
+  /* ========== MOBILE / TABLET ========== */
+  @media (max-width: 768px) {
+    /* Re-enable normal scrolling and real cursor on mobile */
+    * { cursor: auto !important; }
+    *::before, *::after { cursor: auto !important; }
+    html, body {
+      overflow: auto;
+      cursor: auto;
+      height: auto;
+      min-height: 100%;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    /* Hide the custom cursor entirely on touch devices */
+    .cursor, .cursor-dot { display: none !important; }
+
+    /* Hide the decorative bg-track horizontal animation system */
+    .bg-track {
+      position: fixed;
+      width: 100vw;
+      height: 100vh;
+      transform: none !important;
+    }
+    .bg-slide { width: 100vw; }
+
+    /* Corners and vertical text don't make sense on mobile */
+    .corner { display: none; }
+
+    /* Nav: compress padding, hide desktop-only items */
+    nav.top-nav {
+      height: 60px;
+      padding: 0 18px;
+    }
+    .nav-links { display: none; }
+    .nav-right .status {
+      padding: 5px 10px;
+      font-size: 10px;
+    }
+    .logo { font-size: 19px; gap: 10px; }
+    .logo .logo-mark { width: 18px; height: 18px; }
+
+    /* Sections: convert from absolute-positioned overlays into a single scrolling document */
+    .section {
+      position: relative;
+      inset: auto;
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transition: none;
+      display: none;
+    }
+    .section.active {
+      display: block;
+    }
+
+    /* Inner wraps: stop being absolute-positioned, let them flow */
+    .home-wrap,
+    .services-wrap,
+    .studio-wrap,
+    .work-wrap,
+    .faq-wrap,
+    .contact-wrap {
+      position: relative;
+      top: auto; left: auto; right: auto; bottom: auto;
+      margin: 0;
+      transform: none;
+      padding: 80px 20px 80px;
+      gap: 36px;
+      grid-template-columns: 1fr;
+      min-height: 100vh;
+      align-items: flex-start;
+    }
+
+    /* HOME */
+    .home-mark {
+      max-width: 260px;
+      margin: 0 auto;
+      order: 2;
+    }
+    .home-mark .mark-tagline { font-size: 10px; padding: 5px 10px; }
+    .home-content { order: 1; }
+    .home-title { font-size: 42px; line-height: 1.05; letter-spacing: -1px; margin-bottom: 18px; }
+    .home-sub { font-size: 15px; margin-bottom: 24px; }
+    .home-ctas { gap: 10px; }
+    .home-eyebrow { font-size: 10px; padding: 6px 12px; margin-bottom: 20px; }
+    .btn { padding: 13px 22px; font-size: 13px; }
+    .btn.ghost { padding: 12px 21px; }
+    .trust-row { margin-top: 28px; padding-top: 22px; gap: 20px; }
+    .trust-item .num { font-size: 24px; }
+    .trust-item .num .small { font-size: 13px; }
+    .trust-item .lbl { font-size: 10px; }
+
+    /* SERVICES */
+    .services-left h2 { font-size: 40px; letter-spacing: -1px; }
+    .services-left p { font-size: 15px; }
+    .price-card { padding: 28px 22px; }
+    .price-card .card-tag { font-size: 10px; padding: 5px 12px; }
+    .price-head .pname { font-size: 19px; }
+    .price-main { margin-bottom: 22px; }
+    .price-main .amount { font-size: 64px; letter-spacing: -2px; }
+    .price-main .dollar { font-size: 26px; }
+    .price-list li { font-size: 14px; padding: 9px 0; gap: 10px; }
+    .price-list li .check { width: 16px; height: 16px; font-size: 9px; }
+    .price-foot .foot-val { font-size: 15px; }
+    .negotiable-note { font-size: 9px; }
+
+    /* STUDIO */
+    .studio-left h2 { font-size: 42px; letter-spacing: -1px; }
+    .studio-left p { font-size: 15px; }
+    .studio-right { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .studio-stat { padding: 18px 16px; }
+    .studio-stat .big { font-size: 30px; letter-spacing: -0.5px; }
+    .studio-stat .big .small-unit { font-size: 11px; }
+    .studio-stat .label { font-size: 10px; }
+    .studio-team-row { padding: 16px 18px; gap: 12px; flex-wrap: wrap; }
+    .avatar-stack { gap: 10px; }
+    .avatar-stack .av { width: 14px; height: 14px; }
+    .avatar-stack .av::after { inset: 2px; }
+    .studio-team-row .team-info .t1 { font-size: 16px; }
+    .studio-team-row .team-info .t2 { font-size: 10px; }
+
+    /* CONTACT */
+    .contact-left h2 { font-size: 48px; letter-spacing: -1.5px; }
+    .contact-left p { font-size: 15px; }
+    .contact-block { padding: 22px 22px; }
+    .contact-block .blabel { font-size: 9px; margin-bottom: 12px; }
+    .contact-block .phone-row { gap: 12px; padding: 9px 0; flex-wrap: wrap; }
+    .contact-block .phone-row .icon { width: 32px; height: 32px; font-size: 13px; }
+    .contact-block .phone-row .num { font-size: 18px; }
+    .contact-block .phone-row .who { font-size: 10px; }
+    .contact-block .phone-row.email-row .num { font-size: 15px; }
+    .contact-block.zelle-block .zelle-tag { font-size: 9px; padding: 3px 9px; }
+    .contact-block.zelle-block p.zelle-note { font-size: 12px; }
+
+    /* Form on mobile */
+    .contact-form { gap: 14px; }
+    .contact-form label { font-size: 9px; }
+    .contact-form input,
+    .contact-form textarea { font-size: 16px; padding: 11px 12px; }
+    .contact-form .form-submit { font-size: 13px; padding: 14px 22px; }
+    .form-success .success-mark { width: 42px; height: 42px; font-size: 20px; }
+    .form-success .success-title { font-size: 24px; }
+    .form-success .success-text { font-size: 13px; }
+
+    /* WORK */
+    .work-wrap {
+      position: relative;
+      margin: 0;
+      padding: 80px 20px 110px;
+      min-height: 100vh;
+    }
+    .work-head {
+      grid-template-columns: 1fr;
+      gap: 22px;
+      margin-bottom: 36px;
+    }
+    .work-head h2 { font-size: 42px; letter-spacing: -1px; }
+    .work-head .right p { font-size: 14px; }
+    .work-sample-notice { font-size: 9px; padding: 6px 11px; }
+    .work-grid { grid-template-columns: 1fr; gap: 18px; }
+    .work-info { padding: 20px 22px 22px; }
+    .work-info h3 { font-size: 22px; }
+    .work-info p { font-size: 14px; }
+    .work-footer-note {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 22px 24px;
+      gap: 18px;
+      margin-top: 36px;
+    }
+    .work-footer-note .text { font-size: 17px; }
+    .work-footer-note .btn-link {
+      align-self: stretch;
+      justify-content: center;
+    }
+
+    /* FAQ */
+    .faq-wrap {
+      position: relative;
+      top: auto; left: auto; right: auto; bottom: auto;
+      padding: 80px 20px 110px;
+      grid-template-columns: 1fr;
+      gap: 28px;
+    }
+    .faq-wrap .faq-left,
+    .contact-wrap .contact-left {
+      position: relative;
+      top: auto;
+    }
+    .faq-left h2 { font-size: 40px; letter-spacing: -1px; }
+    .faq-left p { font-size: 14px; }
+    .faq-q { padding: 18px 20px; font-size: 16px; gap: 12px; }
+    .faq-q .qmark { width: 24px; height: 24px; font-size: 13px; }
+    .faq-a-inner { padding: 0 20px 20px; font-size: 14px; }
+    .faq-item.open .faq-a { max-height: 320px; }
+
+    /* TICKER: shrink and re-position */
+    .ticker { height: 32px; }
+    .ticker .ticker-label { font-size: 9px; padding: 0 12px; letter-spacing: 1px; }
+    .ticker-track { font-size: 9px; letter-spacing: 0.3px; }
+    .ticker-track span { padding: 0 18px; gap: 10px; }
+
+    /* AI fine print: shorter text now fits on one line */
+    .ai-disclosure {
+      bottom: 40px;
+      font-size: 6.5px;
+      letter-spacing: 0.2px;
+      white-space: nowrap;
+      max-width: 95vw;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .ai-disclosure .ai-dot { margin: 0 4px; width: 2px; height: 2px; }
+
+    /* Add bottom padding so content is not hidden behind sticky ticker/fine-print */
+    .home-wrap, .services-wrap, .studio-wrap, .work-wrap, .faq-wrap, .contact-wrap {
+      padding-bottom: 110px;
+    }
+
+    /* Tap targets need to be larger */
+    .nav-links li, .btn, .phone-row, button {
+      min-height: 44px;
+    }
+  }
+
+  /* Smaller phones */
+  @media (max-width: 380px) {
+    .home-title { font-size: 36px; }
+    .services-left h2, .studio-left h2 { font-size: 34px; }
+    .contact-left h2 { font-size: 40px; }
+    .price-main .amount { font-size: 56px; }
+    .studio-right { grid-template-columns: 1fr; }
+    .home-ctas { flex-direction: column; align-items: stretch; }
+    .home-ctas .btn { justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- BACKGROUND -->
+<div class="bg-track" id="bgTrack">
+  <div class="bg-slide"><div class="bg-image" id="bgImg0"></div></div>
+  <div class="bg-slide"><div class="bg-image" id="bgImg1"></div></div>
+</div>
+
+<!-- NAV -->
+<nav class="top-nav">
+  <div class="logo">
+    <div class="logo-mark"></div>
+    Vanta Sites
+  </div>
+  <ul class="nav-links" id="navLinks">
+    <li data-section="home" class="active">Home</li>
+    <li data-section="services">Services</li>
+    <li data-section="studio">Studio</li>
+    <li data-section="work">Work</li>
+    <li data-section="faq">FAQ</li>
+    <li data-section="contact">Contact</li>
+  </ul>
+  <div class="nav-right">
+    <div class="status">
+      <span class="live-dot"></span>
+      <span class="label">Taking orders</span>
+    </div>
+    <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE MENU DRAWER -->
+<div class="mobile-menu" id="mobileMenu">
+  <ul>
+    <li data-section="home" class="active">Home</li>
+    <li data-section="services">Services</li>
+    <li data-section="studio">Studio</li>
+    <li data-section="work">Work</li>
+    <li data-section="faq">FAQ</li>
+    <li data-section="contact">Contact</li>
+  </ul>
+</div>
+
+<!-- CORNERS -->
+<div class="corner tl"></div>
+<div class="corner tr"></div>
+<div class="corner bl"></div>
+<div class="corner br"></div>
+
+<!-- ============== HOME ============== -->
+<section class="section active" id="section-home">
+  <div class="home-wrap">
+
+    <!-- Left: Featured diamond logo block -->
+    <div class="home-mark">
+      <div class="mark-tagline">VANTA / EST. 2026</div>
+      <div class="mark-frame">
+        <div class="frame-tick tl"></div>
+        <div class="frame-tick tr"></div>
+        <div class="frame-tick bl"></div>
+        <div class="frame-tick br"></div>
+        <div class="big-diamond"></div>
+        <div class="mark-label">VANTA SITES</div>
+      </div>
+    </div>
+
+    <!-- Right: Headline + CTAs + Trust row -->
+    <div class="home-content">
+      <div class="home-eyebrow">
+        <span class="dot"></span>
+        Taking orders today
+      </div>
+      <h1 class="home-title">
+        Custom websites,<br>
+        <span class="italic">built to order.</span>
+      </h1>
+      <p class="home-sub">
+        Three of us, building websites for $650 each. You tell us what you need, we send it back the same day.
+      </p>
+      <div class="home-ctas">
+        <button class="btn" data-goto="contact">Get in touch <span class="arrow">→</span></button>
+        <button class="btn ghost" data-goto="services">What you get</button>
+      </div>
+
+      <div class="trust-row">
+        <div class="trust-item">
+          <div class="num">$650<span class="small"> flat</span></div>
+          <div class="lbl">One price, no upsell</div>
+        </div>
+        <div class="trust-item">
+          <div class="num">1–3<span class="small"> hours</span></div>
+          <div class="lbl">From order to delivery</div>
+        </div>
+        <div class="trust-item">
+          <div class="num">Zelle</div>
+          <div class="lbl">Pay after you approve</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============== SERVICES ============== -->
+<section class="section" id="section-services">
+  <div class="services-wrap">
+    <div class="services-left">
+      <div class="section-eyebrow">Services</div>
+      <h2>One thing,<br><span class="italic">done right.</span></h2>
+      <p>Landing pages, business pages, a couple of pages tied together. All the same price.</p>
+      <p>You tell us what the site is for and what you want it to look like. We build it, send it over, you tell us what to change. Pay when you are happy with it.</p>
+    </div>
+
+    <div class="price-card">
+      <div class="card-tag">Website</div>
+
+      <div class="price-head">
+        <span class="pname">Standard build</span>
+        <span class="pflat">Flat rate</span>
+      </div>
+
+      <div class="price-main">
+        <span class="dollar">$</span>
+        <span class="amount">650</span>
+        <span class="per">/ site</span>
+      </div>
+
+      <ul class="price-list">
+        <li><span class="check">✓</span><span>Custom design based on what you tell us</span></li>
+        <li><span class="check">✓</span><span>Works on phones and desktops</span></li>
+        <li><span class="check">✓</span><span>A handful of pages, your call on the layout</span></li>
+        <li><span class="check">✓</span><span>You get the code. Keep it, host it where you want</span></li>
+        <li><span class="check">✓</span><span>One round of changes included</span></li>
+        <li><span class="check">✓</span><span>Pay by Zelle after you see the finished site</span></li>
+      </ul>
+
+      <div class="price-foot">
+        <span class="foot-label">Turnaround</span>
+        <span class="foot-val">Same day, 1–3 hours</span>
+      </div>
+
+      <div class="negotiable-note">Pricing is negotiable. Reach out and let's talk.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== STUDIO ============== -->
+<section class="section" id="section-studio">
+  <div class="studio-wrap">
+    <div class="studio-left">
+      <div class="section-eyebrow">The team</div>
+      <h2>Three people.<br><span class="italic">No middlemen.</span></h2>
+      <p>Vanta Sites is three people who build websites. There is no agency, no project manager, no client portal. You text us, we build, you pay when it is done.</p>
+      <p>Same price for every job. Same turnaround. You always know who you are talking to.</p>
+    </div>
+    <div class="studio-right">
+      <div class="studio-stat">
+        <div class="big">3<span class="small-unit">people</span></div>
+        <div class="label">The whole team</div>
+      </div>
+      <div class="studio-stat">
+        <div class="big">$650<span class="small-unit">flat</span></div>
+        <div class="label">One price</div>
+      </div>
+      <div class="studio-stat">
+        <div class="big">1–3<span class="small-unit">hrs</span></div>
+        <div class="label">Same-day delivery</div>
+      </div>
+      <div class="studio-stat">
+        <div class="big">Zelle<span class="small-unit">only</span></div>
+        <div class="label">Pay on approval</div>
+      </div>
+      <div class="studio-team-row">
+        <div class="avatar-stack">
+          <div class="av primary"></div>
+          <div class="av"></div>
+          <div class="av"></div>
+        </div>
+        <div class="team-info">
+          <div class="t1">A three-person team</div>
+          <div class="t2">Text any of us. Someone picks up.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== WORK ============== -->
+<section class="section" id="section-work">
+  <div class="work-wrap">
+    <div class="work-head">
+      <div class="left">
+        <div class="section-eyebrow">Our work</div>
+        <h2>Sample builds.<br><span class="italic">Yours would be custom.</span></h2>
+        <div class="work-sample-notice">
+          <span class="dot"></span>
+          Sample sites &middot; click any one to see the full build
+        </div>
+      </div>
+      <div class="right">
+        <p>We are a new studio. The three sites below are sample builds we made to show the range of styles we work in. Hit any of them to see the full thing as if it were a live site for that business.</p>
+        <p>Your site would be built from scratch around your brand, not adapted from these.</p>
+      </div>
+    </div>
+
+    <div class="work-grid">
+
+      <a href="samples/lumen.html" class="work-card">
+        <div class="work-thumb">
+          <span class="tag">Restaurant</span>
+          <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1200&q=80" alt="Lumen Bistro sample build" />
+        </div>
+        <div class="work-info">
+          <h3>Lumen <span class="italic">Bistro</span></h3>
+          <div class="industry">Restaurant · Hospitality</div>
+          <p>Warm, image-led site for a small seasonal restaurant. Menu, story, reservations, and press in a calm earthy palette.</p>
+          <div class="visit-link">
+            View sample
+            <span class="arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="samples/ironside.html" class="work-card">
+        <div class="work-thumb">
+          <span class="tag">Trades</span>
+          <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1200&q=80" alt="Ironside Contracting sample build" />
+        </div>
+        <div class="work-info">
+          <h3>Ironside <span class="italic">Contracting</span></h3>
+          <div class="industry">Construction · Trades</div>
+          <p>Bold and direct site for a contractor. Services, past projects, a clear process, and a phone number that is always visible.</p>
+          <div class="visit-link">
+            View sample
+            <span class="arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="samples/mira.html" class="work-card">
+        <div class="work-thumb">
+          <span class="tag">Creative</span>
+          <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=1200&q=80" alt="Mira Lang Studio sample build" />
+        </div>
+        <div class="work-info">
+          <h3>Mira <span class="italic">Lang</span></h3>
+          <div class="industry">Photographer · Portfolio</div>
+          <p>Minimal portfolio for a freelance photographer. Editorial gallery, about, rates, and a single email contact.</p>
+          <div class="visit-link">
+            View sample
+            <span class="arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+    </div>
+
+    <div class="work-footer-note">
+      <div class="text">
+        Like one of these but want it for <span class="italic">your business?</span>
+      </div>
+      <button type="button" class="btn-link" data-goto="contact">
+        Get in touch
+        <span>→</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ============== FAQ ============== -->
+<section class="section" id="section-faq">
+  <div class="faq-wrap">
+    <div class="faq-left">
+      <div class="section-eyebrow">Questions</div>
+      <h2>Things people<br><span class="italic">ask first.</span></h2>
+      <p>Short, honest answers. If something is not covered here, text us at (704) 831-0055.</p>
+    </div>
+
+    <ul class="faq-list" id="faqList">
+
+      <li class="faq-item">
+        <div class="faq-q">
+          <span>What if I do not like the result?</span>
+          <span class="qmark">+</span>
+        </div>
+        <div class="faq-a">
+          <div class="faq-a-inner">
+            You do not pay until you have seen the finished site and approved it. One round of changes is included in the price. If we cannot get it right, you walk away and owe nothing.
+          </div>
+        </div>
+      </li>
+
+      <li class="faq-item">
+        <div class="faq-q">
+          <span>How many pages does $650 cover?</span>
+          <span class="qmark">+</span>
+        </div>
+        <div class="faq-a">
+          <div class="faq-a-inner">
+            Most builds are 3 to 5 pages. Typical setup is home, about, services, and contact. If you need more, text us first and we will quote it. Sometimes it stays at $650, sometimes it does not.
+          </div>
+        </div>
+      </li>
+
+      <li class="faq-item">
+        <div class="faq-q">
+          <span>Do you handle hosting and the domain?</span>
+          <span class="qmark">+</span>
+        </div>
+        <div class="faq-a">
+          <div class="faq-a-inner">
+            We do not host your site for you. We deliver the code and walk you through getting it live on something like Vercel, Netlify, or GitHub Pages. All three are free for a site this size. If you want a custom domain like yourbusiness.com, that costs about $12 a year from a registrar like Namecheap.
+          </div>
+        </div>
+      </li>
+
+      <li class="faq-item">
+        <div class="faq-q">
+          <span>What do you need from me to start?</span>
+          <span class="qmark">+</span>
+        </div>
+        <div class="faq-a">
+          <div class="faq-a-inner">
+            Text us the name of your business, what the site is for, and any examples of sites you like. Send any text or photos you want included. We take it from there.
+          </div>
+        </div>
+      </li>
+
+      <li class="faq-item">
+        <div class="faq-q">
+          <span>How do revisions work?</span>
+          <span class="qmark">+</span>
+        </div>
+        <div class="faq-a">
+          <div class="faq-a-inner">
+            One round of revisions is included. You send us a list of changes and we make them in the same day. Bigger changes after that are usually a small add-on rather than a full re-quote.
+          </div>
+        </div>
+      </li>
+
+      <li class="faq-item">
+        <div class="faq-q">
+          <span>Is the $650 final?</span>
+          <span class="qmark">+</span>
+        </div>
+        <div class="faq-a">
+          <div class="faq-a-inner">
+            Most of the time, yes. If the job is bigger than a standard build, we say so up front before you commit to anything. If your budget is tighter, tell us. We work with people.
+          </div>
+        </div>
+      </li>
+
+    </ul>
+  </div>
+</section>
+
+<!-- ============== CONTACT ============== -->
+<section class="section" id="section-contact">
+  <div class="contact-wrap">
+    <div class="contact-left">
+      <div class="section-eyebrow">Get in touch</div>
+      <h2>Text us.<br><span class="italic">We answer.</span></h2>
+      <p>Three phone numbers, any of them works. Text is faster than a call. Tell us what you need and we will get back to you.</p>
+      <p>Pricing is negotiable. If the $650 does not fit your situation, say so and we will figure it out.</p>
+    </div>
+
+    <div class="contact-right">
+
+      <div class="contact-block">
+        <div class="blabel"><span class="indicator"></span>Phone / Text</div>
+        <a href="tel:+17048310055" class="phone-row">
+          <div class="icon">☎</div>
+          <div class="num">+1 (704) 831-0055</div>
+          <div class="who">Primary</div>
+        </a>
+        <a href="tel:+17043096442" class="phone-row">
+          <div class="icon">☎</div>
+          <div class="num">+1 (704) 309-6442</div>
+          <div class="who">Also reaches us</div>
+        </a>
+        <a href="tel:+17043097368" class="phone-row">
+          <div class="icon">☎</div>
+          <div class="num">+1 (704) 309-7368</div>
+          <div class="who">Also reaches us</div>
+        </a>
+      </div>
+
+      <div class="contact-block">
+        <div class="blabel"><span class="indicator"></span>Email</div>
+        <a href="mailto:vantasites401@gmail.com" class="phone-row email-row">
+          <div class="icon">@</div>
+          <div class="num">vantasites401@gmail.com</div>
+        </a>
+      </div>
+
+      <div class="contact-block zelle-block">
+        <div class="zelle-tag">Zelle payment</div>
+        <div class="blabel"><span class="indicator"></span>Send payment to</div>
+        <div class="phone-row">
+          <div class="icon">$</div>
+          <div class="num">+1 (704) 831-0055</div>
+          <div class="who">Primary</div>
+        </div>
+        <div class="phone-row">
+          <div class="icon">$</div>
+          <div class="num">+1 (704) 309-6442</div>
+        </div>
+        <div class="phone-row">
+          <div class="icon">$</div>
+          <div class="num">+1 (704) 309-7368</div>
+        </div>
+        <p class="zelle-note">Any of the three numbers works for Zelle. Pay once you see the finished site and you are happy with it.</p>
+      </div>
+
+      <div class="contact-block form-block">
+        <div class="blabel"><span class="indicator"></span>Or send us a message</div>
+        <form id="contactForm" class="contact-form" action="https://formspree.io/f/xvzybqpn" method="POST" novalidate>
+          <div class="form-row">
+            <label for="cf-name">Your name</label>
+            <input type="text" id="cf-name" name="name" required autocomplete="name" />
+          </div>
+          <div class="form-row">
+            <label for="cf-contact">Phone or email</label>
+            <input type="text" id="cf-contact" name="phone_or_email" required autocomplete="tel" placeholder="So we can reach you back" />
+          </div>
+          <div class="form-row">
+            <label for="cf-message">What do you need?</label>
+            <textarea id="cf-message" name="message" rows="4" required placeholder="A few words about the site you want"></textarea>
+          </div>
+          <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
+          <input type="hidden" name="_subject" value="New Vanta Sites inquiry" />
+          <button type="submit" class="btn form-submit">
+            <span class="btn-label">Send message</span>
+            <span class="arrow">→</span>
+          </button>
+          <div class="form-status" id="formStatus" aria-live="polite"></div>
+        </form>
+
+        <div class="form-success" id="formSuccess">
+          <div class="success-mark">✓</div>
+          <div class="success-title">Got it.</div>
+          <div class="success-text">Your message landed in our inbox. We will text or email you back shortly. If you have not heard back within a few hours, text (704) 831-0055.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- AI + PRICING FINE PRINT -->
+<div class="ai-disclosure">
+  AI-assisted, human-refined<span class="ai-dot"></span>Pricing is negotiable<span class="ai-dot"></span>Vanta Sites © 2026
+</div>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-label">VANTA</div>
+  <div class="ticker-track-wrap">
+    <div class="ticker-track">
+      <span>Websites for $650 flat</span>
+      <span>Same-day delivery, 1 to 3 hours</span>
+      <span>A three-person team</span>
+      <span>Pay by Zelle once you approve the site</span>
+      <span>Text (704) 831-0055 to get started</span>
+      <span>Pricing is negotiable</span>
+      <span>Websites for $650 flat</span>
+      <span>Same-day delivery, 1 to 3 hours</span>
+      <span>A three-person team</span>
+      <span>Pay by Zelle once you approve the site</span>
+      <span>Text (704) 831-0055 to get started</span>
+      <span>Pricing is negotiable</span>
+    </div>
+  </div>
+</div>
+
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-dot" id="cursorDot"></div>
+
+<script>
+  // Each section just gets a subtle palette difference via the bg
+  // Detect touch/mobile once
+  const isTouch = window.matchMedia('(max-width: 768px)').matches || ('ontouchstart' in window);
+
+  const sectionConfig = {
+    home:     {},
+    services: {},
+    studio:   {},
+    work:     {},
+    faq:      {},
+    contact:  {}
+  };
+
+  let activeSection = 'home';
+  let isAnimating = false;
+  const TRANSITION_MS = isTouch ? 0 : 1400;
+
+  const bgTrack = document.getElementById('bgTrack');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const mobileToggle = document.getElementById('mobileToggle');
+
+  function setActiveNav(target) {
+    document.querySelectorAll('.nav-links li, .mobile-menu li').forEach(li => {
+      li.classList.toggle('active', li.dataset.section === target);
+    });
+  }
+
+  function switchSection(target) {
+    if (isAnimating || target === activeSection) return;
+    if (!sectionConfig[target]) return;
+
+    // Close mobile menu if open
+    if (mobileMenu && mobileMenu.classList.contains('open')) {
+      mobileMenu.classList.remove('open');
+      mobileToggle.classList.remove('open');
+    }
+
+    // On mobile, do a simple swap with no animation lock
+    if (isTouch) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.getElementById('section-' + target).classList.add('active');
+      setActiveNav(target);
+      activeSection = target;
+      // Scroll to top so user sees the new section from the start
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      return;
+    }
+
+    // Desktop animated transition
+    isAnimating = true;
+    setActiveNav(target);
+
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById('section-' + target).classList.add('active');
+
+    bgTrack.style.transform = 'translateX(-100vw)';
+
+    setTimeout(() => {
+      bgTrack.style.transition = 'none';
+      bgTrack.style.transform = 'translateX(0)';
+      void bgTrack.offsetHeight;
+      bgTrack.style.transition = 'transform 1.4s cubic-bezier(0.77, 0, 0.175, 1)';
+
+      activeSection = target;
+      setTimeout(() => { isAnimating = false; }, 200);
+    }, TRANSITION_MS);
+  }
+
+  // Wire up nav links (desktop)
+  document.querySelectorAll('.nav-links li').forEach(li => {
+    li.addEventListener('click', () => switchSection(li.dataset.section));
+  });
+  // Wire up mobile menu links
+  document.querySelectorAll('.mobile-menu li').forEach(li => {
+    li.addEventListener('click', () => switchSection(li.dataset.section));
+  });
+  // CTAs with data-goto
+  document.querySelectorAll('[data-goto]').forEach(btn => {
+    btn.addEventListener('click', () => switchSection(btn.dataset.goto));
+  });
+  // Logo goes home
+  document.querySelector('.logo').addEventListener('click', () => switchSection('home'));
+
+  // Hamburger toggle
+  if (mobileToggle) {
+    mobileToggle.addEventListener('click', () => {
+      mobileMenu.classList.toggle('open');
+      mobileToggle.classList.toggle('open');
+    });
+  }
+
+  // FAQ accordion
+  document.querySelectorAll('.faq-item .faq-q').forEach(q => {
+    q.addEventListener('click', () => {
+      const item = q.parentElement;
+      const wasOpen = item.classList.contains('open');
+      // Close all
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      // Open the clicked one if it was not already open
+      if (!wasOpen) item.classList.add('open');
+    });
+  });
+
+  // Contact form: AJAX submit to Formspree
+  const contactForm = document.getElementById('contactForm');
+  const formStatus = document.getElementById('formStatus');
+  const formSuccess = document.getElementById('formSuccess');
+
+  if (contactForm) {
+    contactForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // Reset previous error states
+      formStatus.textContent = '';
+      formStatus.classList.remove('show');
+      contactForm.querySelectorAll('[aria-invalid]').forEach(el => el.removeAttribute('aria-invalid'));
+
+      // Simple client-side validation
+      const name = contactForm.querySelector('#cf-name');
+      const contact = contactForm.querySelector('#cf-contact');
+      const message = contactForm.querySelector('#cf-message');
+      let invalidField = null;
+
+      if (!name.value.trim())    { name.setAttribute('aria-invalid', 'true'); invalidField = invalidField || name; }
+      if (!contact.value.trim()) { contact.setAttribute('aria-invalid', 'true'); invalidField = invalidField || contact; }
+      if (!message.value.trim()) { message.setAttribute('aria-invalid', 'true'); invalidField = invalidField || message; }
+
+      if (invalidField) {
+        formStatus.textContent = 'Please fill in all fields before sending.';
+        formStatus.classList.add('show');
+        invalidField.focus();
+        return;
+      }
+
+      // Disable the button while we submit
+      const submitBtn = contactForm.querySelector('.form-submit');
+      const btnLabel = submitBtn.querySelector('.btn-label');
+      const originalLabel = btnLabel.textContent;
+      submitBtn.disabled = true;
+      btnLabel.textContent = 'Sending...';
+
+      try {
+        const response = await fetch(contactForm.action, {
+          method: 'POST',
+          body: new FormData(contactForm),
+          headers: { 'Accept': 'application/json' }
+        });
+
+        if (response.ok) {
+          // Hide the form, show the success state
+          contactForm.style.display = 'none';
+          formSuccess.classList.add('show');
+        } else {
+          // Try to read Formspree's error response for a nicer message
+          let errMsg = 'Something went wrong. Please text us instead.';
+          try {
+            const data = await response.json();
+            if (data && data.errors && data.errors.length) {
+              errMsg = data.errors.map(er => er.message).join(', ');
+            }
+          } catch (_) { /* ignore JSON parse error */ }
+          formStatus.textContent = errMsg;
+          formStatus.classList.add('show');
+          submitBtn.disabled = false;
+          btnLabel.textContent = originalLabel;
+        }
+      } catch (err) {
+        formStatus.textContent = 'Network problem. Please try again or text us at (704) 831-0055.';
+        formStatus.classList.add('show');
+        submitBtn.disabled = false;
+        btnLabel.textContent = originalLabel;
+      }
+    });
+  }
+
+  window.addEventListener('keydown', (e) => {
+    if (isAnimating) return;
+    const numMap = { '1':'home', '2':'services', '3':'studio', '4':'work', '5':'faq', '6':'contact' };
+    if (numMap[e.key]) switchSection(numMap[e.key]);
+  });
+
+  // CURSOR (desktop only)
+  if (!isTouch) {
+    const cursor = document.getElementById('cursor');
+    const cursorDot = document.getElementById('cursorDot');
+    let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+    let cursorX = mouseX, cursorY = mouseY;
+    let dotX = mouseX, dotY = mouseY;
+
+    window.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
+
+    function rafLoop() {
+      cursorX += (mouseX - cursorX) * 0.18;
+      cursorY += (mouseY - cursorY) * 0.18;
+      dotX += (mouseX - dotX) * 0.55;
+      dotY += (mouseY - dotY) * 0.55;
+      cursor.style.transform = `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%)`;
+      cursorDot.style.transform = `translate(${dotX}px, ${dotY}px) translate(-50%, -50%)`;
+      requestAnimationFrame(rafLoop);
+    }
+    requestAnimationFrame(rafLoop);
+
+    document.querySelectorAll('button, .nav-links li, .logo, .price-card, .studio-stat, .phone-row, .faq-q, .work-card').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+    });
+  }
+</script>
+
+</body>
+</html>
