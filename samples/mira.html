@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mira Lang · Photography &amp; Direction</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #f9f8f6;
+    color: #161513;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  :root {
+    --bg: #f9f8f6;
+    --bg-2: #ffffff;
+    --ink: #161513;
+    --ink-soft: rgba(22, 21, 19, 0.65);
+    --ink-mute: rgba(22, 21, 19, 0.4);
+    --line: rgba(22, 21, 19, 0.1);
+    --line-2: rgba(22, 21, 19, 0.18);
+  }
+  img { display: block; max-width: 100%; }
+  a { color: inherit; text-decoration: none; }
+
+  /* SAMPLE banner */
+  .sample-banner {
+    background: #1a2b50;
+    color: #fff;
+    text-align: center;
+    padding: 10px 16px;
+    font-size: 12px;
+    letter-spacing: 0.4px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+  }
+  .sample-banner a {
+    color: #fff;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* NAV */
+  nav.top {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(249, 248, 246, 0.92);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  .nav-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 24px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .logo {
+    font-family: 'Instrument Serif', serif;
+    font-size: 22px;
+    letter-spacing: -0.3px;
+  }
+  .logo .i { font-style: italic; }
+  .nav-links {
+    display: flex; gap: 32px;
+    list-style: none;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--ink-soft);
+  }
+  .nav-links a { transition: color 0.2s; }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-links li.dot::before {
+    content: '·';
+    margin-right: 8px;
+    color: var(--ink-mute);
+  }
+
+  /* HERO */
+  .hero {
+    padding: 80px 40px 100px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .hero .hero-headline {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(48px, 8vw, 132px);
+    line-height: 1;
+    letter-spacing: -2px;
+    color: var(--ink);
+    font-weight: 400;
+    max-width: 1100px;
+  }
+  .hero .hero-headline .it { font-style: italic; }
+  .hero .hero-headline .mute { color: var(--ink-mute); }
+  .hero-meta {
+    margin-top: 60px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 60px;
+    padding-top: 40px;
+    border-top: 1px solid var(--line);
+  }
+  .hero-meta .col .lbl {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--ink-mute);
+    margin-bottom: 10px;
+  }
+  .hero-meta .col .val {
+    font-family: 'Instrument Serif', serif;
+    font-size: 19px;
+    line-height: 1.4;
+    color: var(--ink);
+  }
+  .hero-meta .col .val .it { font-style: italic; color: var(--ink-soft); }
+
+  /* GALLERY */
+  section.gallery {
+    padding: 40px 40px 100px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 16px;
+  }
+  .g-item {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .g-item img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+  .g-item:hover img { transform: scale(1.04); }
+  .g-item .caption {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 18px 20px;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.7) 100%);
+    color: #fff;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.3s, transform 0.3s;
+  }
+  .g-item:hover .caption {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .g-item .caption h4 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 20px;
+    line-height: 1.2;
+    margin-bottom: 4px;
+  }
+  .g-item .caption .meta {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.85;
+  }
+  /* Asymmetric grid */
+  .g-item.g-tall { grid-column: span 6; aspect-ratio: 4/5; }
+  .g-item.g-wide { grid-column: span 6; aspect-ratio: 4/5; }
+  .g-item.g-square { grid-column: span 4; aspect-ratio: 1/1; }
+  .g-item.g-portrait { grid-column: span 4; aspect-ratio: 4/5; }
+  .g-item.g-landscape { grid-column: span 8; aspect-ratio: 3/2; }
+  .g-item.g-half { grid-column: span 6; aspect-ratio: 3/4; }
+
+  /* ABOUT */
+  section.about {
+    background: #f1efe9;
+    padding: 110px 40px;
+  }
+  .about-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .portrait {
+    aspect-ratio: 4/5;
+    overflow: hidden;
+    max-width: 460px;
+  }
+  .portrait img { width: 100%; height: 100%; object-fit: cover; }
+  .about-text .eyebrow {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--ink-mute);
+    margin-bottom: 22px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .about-text .eyebrow::before {
+    content: '';
+    width: 24px; height: 1px;
+    background: var(--ink-mute);
+  }
+  .about-text h2 {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(38px, 4.5vw, 64px);
+    line-height: 1.05;
+    letter-spacing: -1px;
+    font-weight: 400;
+    margin-bottom: 28px;
+    max-width: 540px;
+  }
+  .about-text h2 .it { font-style: italic; }
+  .about-text p {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--ink-soft);
+    margin-bottom: 18px;
+    max-width: 520px;
+  }
+  .credentials {
+    margin-top: 36px;
+    padding-top: 30px;
+    border-top: 1px solid var(--line);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+  }
+  .credentials .item .lbl {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--ink-mute);
+    margin-bottom: 8px;
+  }
+  .credentials .item .val {
+    font-family: 'Instrument Serif', serif;
+    font-size: 17px;
+    line-height: 1.4;
+    color: var(--ink);
+  }
+  .credentials .item .val .it { font-style: italic; color: var(--ink-soft); }
+
+  /* SERVICES / RATES */
+  section.services {
+    padding: 110px 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .services-head {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 60px;
+    align-items: end;
+    margin-bottom: 60px;
+  }
+  .services-head .eyebrow {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--ink-mute);
+    margin-bottom: 18px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .services-head .eyebrow::before {
+    content: ''; width: 24px; height: 1px; background: var(--ink-mute);
+  }
+  .services-head h2 {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(40px, 5vw, 72px);
+    line-height: 1.04;
+    letter-spacing: -1px;
+    font-weight: 400;
+  }
+  .services-head h2 .it { font-style: italic; }
+  .services-head p {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--ink-soft);
+    max-width: 460px;
+  }
+  .rate-list {
+    border-top: 1px solid var(--line-2);
+  }
+  .rate-row {
+    display: grid;
+    grid-template-columns: 0.3fr 1fr 1.5fr 0.5fr;
+    gap: 40px;
+    padding: 30px 0;
+    border-bottom: 1px solid var(--line);
+    align-items: center;
+  }
+  .rate-row .n {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 17px;
+    color: var(--ink-mute);
+  }
+  .rate-row .name {
+    font-family: 'Instrument Serif', serif;
+    font-size: 26px;
+    color: var(--ink);
+  }
+  .rate-row .desc {
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+  }
+  .rate-row .price {
+    text-align: right;
+    font-family: 'Instrument Serif', serif;
+    font-size: 24px;
+    color: var(--ink);
+  }
+  .rate-row .price .from {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--ink-mute);
+    margin-bottom: 4px;
+  }
+
+  /* TESTIMONIAL */
+  section.testimonial {
+    padding: 100px 40px;
+    background: #ebe9e2;
+  }
+  .test-inner {
+    max-width: 980px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .test-inner blockquote {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(28px, 3.8vw, 50px);
+    line-height: 1.25;
+    letter-spacing: -0.5px;
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: 32px;
+  }
+  .test-inner blockquote .it { font-style: italic; }
+  .test-inner .src {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--ink-soft);
+  }
+  .test-inner .src b {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  /* CONTACT CTA */
+  section.contact {
+    padding: 130px 40px;
+    background: var(--ink);
+    color: #f4f2ec;
+    text-align: center;
+  }
+  .contact-inner {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .contact-inner .eyebrow {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.8px;
+    color: rgba(244, 242, 236, 0.5);
+    margin-bottom: 22px;
+  }
+  .contact-inner h2 {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(48px, 6vw, 96px);
+    line-height: 1;
+    letter-spacing: -1.5px;
+    font-weight: 400;
+    margin-bottom: 32px;
+  }
+  .contact-inner h2 .it { font-style: italic; color: rgba(244, 242, 236, 0.7); }
+  .contact-inner p {
+    font-size: 17px;
+    line-height: 1.6;
+    color: rgba(244, 242, 236, 0.7);
+    max-width: 480px;
+    margin: 0 auto 40px;
+  }
+  .contact-email {
+    display: inline-block;
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 28px;
+    color: #f4f2ec;
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgba(244, 242, 236, 0.4);
+    transition: border-color 0.2s;
+  }
+  .contact-email:hover { border-color: #f4f2ec; }
+  .contact-meta {
+    margin-top: 60px;
+    padding-top: 36px;
+    border-top: 1px solid rgba(244, 242, 236, 0.1);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    text-align: center;
+  }
+  .contact-meta .col .lbl {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: rgba(244, 242, 236, 0.4);
+    margin-bottom: 6px;
+  }
+  .contact-meta .col .val {
+    font-family: 'Instrument Serif', serif;
+    font-size: 17px;
+    color: rgba(244, 242, 236, 0.9);
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--ink);
+    color: rgba(244, 242, 236, 0.55);
+    padding: 30px 40px;
+    border-top: 1px solid rgba(244, 242, 236, 0.08);
+  }
+  .foot-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    font-size: 12px;
+  }
+  .foot-inner a:hover { color: #f4f2ec; }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .nav-inner { padding: 18px 20px; }
+    .nav-links { display: none; }
+    .hero { padding: 50px 20px 70px; }
+    .hero-meta { grid-template-columns: 1fr; gap: 24px; }
+    section.gallery { padding: 30px 20px 70px; }
+    .gallery-grid { gap: 10px; }
+    .g-item.g-tall, .g-item.g-wide, .g-item.g-square,
+    .g-item.g-portrait, .g-item.g-landscape, .g-item.g-half {
+      grid-column: span 12;
+      aspect-ratio: 4/5;
+    }
+    section.about, section.services, section.testimonial, section.contact {
+      padding: 70px 20px;
+    }
+    .about-inner { grid-template-columns: 1fr; gap: 40px; }
+    .portrait { max-width: 100%; }
+    .credentials { grid-template-columns: 1fr; gap: 20px; }
+    .services-head { grid-template-columns: 1fr; gap: 22px; }
+    .rate-row {
+      grid-template-columns: 1fr;
+      gap: 8px;
+      padding: 22px 0;
+    }
+    .rate-row .price { text-align: left; }
+    .contact-meta { grid-template-columns: 1fr; gap: 20px; }
+    footer { padding: 24px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sample-banner">
+  This is a sample build by Vanta Sites. <a href="../index.html">See more samples →</a>
+</div>
+
+<nav class="top">
+  <div class="nav-inner">
+    <div class="logo">Mira <span class="i">Lang</span></div>
+    <ul class="nav-links">
+      <li><a href="#gallery">Work</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Rates</a></li>
+      <li class="dot"><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <h1 class="hero-headline">
+    Photography &amp; <span class="it">direction</span> for <span class="mute">brands that need</span> <span class="it">a quieter</span> kind of picture.
+  </h1>
+
+  <div class="hero-meta">
+    <div class="col">
+      <div class="lbl">Based in</div>
+      <div class="val">Charlotte, NC <span class="it">· available worldwide</span></div>
+    </div>
+    <div class="col">
+      <div class="lbl">Working with</div>
+      <div class="val">Hotels, restaurants, fashion, <span class="it">slow brands</span></div>
+    </div>
+    <div class="col">
+      <div class="lbl">Available</div>
+      <div class="val">Booking Q3 &amp; Q4 2026</div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery" id="gallery">
+  <div class="gallery-grid">
+
+    <div class="g-item g-tall">
+      <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=1400&q=80" alt="" />
+      <div class="caption">
+        <h4>Solstice · A Magazine</h4>
+        <div class="meta">Editorial · 2025</div>
+      </div>
+    </div>
+
+    <div class="g-item g-wide">
+      <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1400&q=80" alt="" />
+      <div class="caption">
+        <h4>Linen House · Hotel Group</h4>
+        <div class="meta">Commercial · 2025</div>
+      </div>
+    </div>
+
+    <div class="g-item g-square">
+      <img src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?auto=format&fit=crop&w=1100&q=80" alt="" />
+      <div class="caption">
+        <h4>Field Notes</h4>
+        <div class="meta">Personal series · 2024</div>
+      </div>
+    </div>
+
+    <div class="g-item g-square">
+      <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1100&q=80" alt="" />
+      <div class="caption">
+        <h4>Ortega · Lookbook</h4>
+        <div class="meta">Fashion · 2024</div>
+      </div>
+    </div>
+
+    <div class="g-item g-square">
+      <img src="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=1100&q=80" alt="" />
+      <div class="caption">
+        <h4>The Lumen Kitchen</h4>
+        <div class="meta">Food &amp; restaurant · 2024</div>
+      </div>
+    </div>
+
+    <div class="g-item g-landscape">
+      <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1800&q=80" alt="" />
+      <div class="caption">
+        <h4>Drift · Travel feature</h4>
+        <div class="meta">Editorial · 2024</div>
+      </div>
+    </div>
+
+    <div class="g-item g-portrait">
+      <img src="https://images.unsplash.com/photo-1488161628813-04466f872be2?auto=format&fit=crop&w=1100&q=80" alt="" />
+      <div class="caption">
+        <h4>Theo · Portrait series</h4>
+        <div class="meta">Personal · 2024</div>
+      </div>
+    </div>
+
+    <div class="g-item g-half">
+      <img src="https://images.unsplash.com/photo-1493612276216-ee3925520721?auto=format&fit=crop&w=1400&q=80" alt="" />
+      <div class="caption">
+        <h4>Morning Light</h4>
+        <div class="meta">Personal series · 2023</div>
+      </div>
+    </div>
+
+    <div class="g-item g-half">
+      <img src="https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=1400&q=80" alt="" />
+      <div class="caption">
+        <h4>Vela Atelier</h4>
+        <div class="meta">Brand campaign · 2023</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-inner">
+    <div class="portrait">
+      <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=1100&q=80" alt="Mira Lang portrait" />
+    </div>
+    <div class="about-text">
+      <div class="eyebrow">About</div>
+      <h2>A photographer who <span class="it">prefers natural light</span> and the time it takes to find it.</h2>
+      <p>Mira Lang is a photographer and director working primarily in editorial, hospitality, and slow-fashion. Trained at the Maine Media Workshops, formerly assistant to William Park, now working independently from a small studio in Charlotte.</p>
+      <p>Her work has appeared in Kinfolk, Cereal Magazine, Garden &amp; Gun, and on the websites of small hotels and quiet restaurants across the United States and Europe.</p>
+
+      <div class="credentials">
+        <div class="item">
+          <div class="lbl">Selected clients</div>
+          <div class="val">Linen House Hotels<br>Ortega Studios<br>Lumen Bistro<br>Vela Atelier</div>
+        </div>
+        <div class="item">
+          <div class="lbl">Selected publications</div>
+          <div class="val">Kinfolk Magazine<br>Cereal Magazine<br>Garden &amp; Gun<br>Architectural Digest</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES / RATES -->
+<section class="services" id="services">
+  <div class="services-head">
+    <div>
+      <div class="eyebrow">Services &amp; rates</div>
+      <h2>How we<br><span class="it">might work together.</span></h2>
+    </div>
+    <p>Below is a starting framework. Every project is quoted individually after a short call. Usage rights, travel, and crew are billed separately and laid out in the contract before we start.</p>
+  </div>
+
+  <div class="rate-list">
+
+    <div class="rate-row">
+      <div class="n">01</div>
+      <div class="name">Editorial</div>
+      <div class="desc">Magazine features, brand editorials, longform photo stories. Half-day to multi-day, usually with a small crew.</div>
+      <div class="price"><span class="from">From</span>$3,800</div>
+    </div>
+
+    <div class="rate-row">
+      <div class="n">02</div>
+      <div class="name">Commercial</div>
+      <div class="desc">Hotel and hospitality campaigns, brand launches, e-commerce. Includes shot list planning and post.</div>
+      <div class="price"><span class="from">From</span>$6,500</div>
+    </div>
+
+    <div class="rate-row">
+      <div class="n">03</div>
+      <div class="name">Portraits</div>
+      <div class="desc">Founder portraits, author headshots, family. In-studio or on location, two hours plus retouching.</div>
+      <div class="price"><span class="from">From</span>$1,200</div>
+    </div>
+
+    <div class="rate-row">
+      <div class="n">04</div>
+      <div class="name">Direction</div>
+      <div class="desc">Brand films and motion campaigns. Direction, casting, location scouting, and edit oversight.</div>
+      <div class="price"><span class="from">Inquire</span></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section class="testimonial">
+  <div class="test-inner">
+    <blockquote>
+      Mira does not work fast. <span class="it">She works carefully</span>, and the images are the kind you want to print and hang on a wall.
+    </blockquote>
+    <div class="src"><b>Anders Webb</b> &nbsp;·&nbsp; Creative Director, Linen House Hotels</div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="contact-inner">
+    <div class="eyebrow">· Get in touch</div>
+    <h2>Let's make<br><span class="it">something good.</span></h2>
+    <p>For inquiries about projects, availability, prints, or just to say hello, the best way to reach me is by email. I read every message and try to respond within two days.</p>
+    <a href="mailto:hello@miralang.studio" class="contact-email">hello@miralang.studio</a>
+
+    <div class="contact-meta">
+      <div class="col">
+        <div class="lbl">Studio</div>
+        <div class="val">Charlotte, North Carolina</div>
+      </div>
+      <div class="col">
+        <div class="lbl">Representation</div>
+        <div class="val">Open to inquiries</div>
+      </div>
+      <div class="col">
+        <div class="lbl">Follow</div>
+        <div class="val">Instagram &middot; Are.na</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-inner">
+    <div>© 2026 Mira Lang. All images © their respective owners. Sample build by Vanta Sites.</div>
+    <div><a href="../index.html">vantasites.com →</a></div>
+  </div>
+</footer>
+
+</body>
+</html>
